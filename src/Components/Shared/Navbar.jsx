@@ -1,44 +1,52 @@
 
-
-
 import { Link, NavLink ,useNavigate, } from "react-router-dom";
-import toast from "react-hot-toast"
+import useAuth from "../../Hooks/useAuth";
+import toast from "react-hot-toast";
 import axios from "axios";
-import { useState } from "react";
+import { FiShoppingCart} from 'react-icons/fi'
+import useCart from "../../Hooks/useCart";
 
 
 
 
 export default function Navbar() {
-
-  const [ currentUser, setCurrentUser ] = useState(true)
-//   const { currentUser , logOut } = useAuth();
+ 
+  const { currentUser , logOut } = useAuth();
   const navigate = useNavigate();
+  const  [ , cartItems ] = useCart();
 
 
   const navLinks = <>
-   <li ><NavLink className={({isActive})=> isActive? ' font-semibold border-b text-white/80 px-1 py-[3px] ': '' } to='/'> Home </NavLink></li>
-   <li ><NavLink className={({isActive})=> isActive? ' font-semibold border-b text-white/80 px-1 py-[3px] ': '' } to='/all-foods'> All Food Items </NavLink></li>
-   <li ><NavLink className={({isActive})=> isActive? ' font-semibold border-b text-white/80 px-1 py-[3px] ': '' } to='/blog'> Blog </NavLink></li>
-   <li ><NavLink className={({isActive})=> isActive? ' font-semibold border-b text-white/80 px-1 py-[3px] ': '' } to='/sign-up'> Sign Up </NavLink></li>
+   <li ><NavLink className={({isActive})=> isActive? ' font-semibold border-b text-red-500 px-1 py-[3px] ': '' } to='/'> Home </NavLink></li>
+   <li ><NavLink className={({isActive})=> isActive? ' font-semibold border-b text-red-500 px-1 py-[3px] ': '' } to='/our-menu'> Our Menu </NavLink></li>
+   <li ><NavLink className={({isActive})=> isActive? ' font-semibold border-b text-red-500 px-1 py-[3px] ': '' } to='/our-shop/salad'> Our Shop </NavLink></li>
+   <li ><NavLink className={({isActive})=> isActive? ' font-semibold border-b text-red-500 px-1 py-[3px] ': '' } to='/dashboard'> Dashboard </NavLink></li>
+   <li ><NavLink className={({isActive})=> isActive? ' font-semibold border-b text-red-500 px-1 py-[3px] ': '' } to='/login'> Login </NavLink></li>
+
+   <NavLink to='/dashboard/cart'>
+   <li ><button className="btn relative">
+  <FiShoppingCart size={24} />
+   <span className=" bg-red-600 p-1 absolute top-1 right-1 text-white/80 rounded-full"> {cartItems.length} </span>
+</button></li>
+   </NavLink>
   
   </>
 
     const signOut = () => {
-    //   logOut()
-    //   .then(result => {
-    //     toast.success('Logged Out !')
+      logOut()
+      .then(result => {
+        toast.success('Logged Out !')
   
-    //      axios.get('https://savorspot-cafe-server.vercel.app/logout', {withCredentials : true})
-    //      .then(data => {
-    //       if(data.data.success){
-    //         navigate('/');  
-    //       }
-    //      }) 
-    //   })
-    //   .catch(error => {
-    //     toast.error('Something went wrong')
-    //   })
+         axios.get('https://savorspot-cafe-server.vercel.app/logout', {withCredentials : true})
+         .then(data => {
+          if(data.data.success){
+            navigate('/');  
+          }
+         }) 
+      })
+      .catch(error => {
+        toast.error('Something went wrong')
+      })
     }
 
   return (
@@ -48,7 +56,7 @@ export default function Navbar() {
       <label tabIndex={0} className="btn btn-ghost lg:hidden">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
       </label>
-      <ul tabIndex={0} className={`menu-sm dropdown-content mt-2 p-2 shadow bg-base-100 rounded w-52 font-play `}>
+      <ul tabIndex={0} className={`menu-sm text-gray-700 dropdown-content mt-2 p-2 shadow bg-base-100 rounded w-52 font-play `}>
         {navLinks}
       </ul>
 
@@ -81,7 +89,7 @@ export default function Navbar() {
          <Link to='/add-food'> <li className="font-semibold border p-2 transition-all rounded  hover:bg-slate-500/10 text-lime-600/90 text-sm flex items-center gap-2 "> Add Food  </li></Link>
 
          <Link to='/ordered-foods'> <li className="font-semibold border p-2 transition-all rounded hover:bg-slate-500/10 text-lime-600/90 text-sm flex items-center gap-2 "> My Ordered Foods  </li></Link>
-         <li className="cursor-pointer transition-all p-1 rounded hover:underline" onClick={()=> signOut() }> Log out</li> 
+         <li className="cursor-pointer transition-all p-1 rounded hover:underline text-gray-700" onClick={()=> signOut() }> Log out</li> 
 
         </ul>}
         </div>
